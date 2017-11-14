@@ -14,9 +14,9 @@ open class LQDownloadManager: NSObject {
   
   // 下载状态
   public enum LQDownloadState {
-    case start
-    case suspend
-    case complete
+    case started
+    case suspended
+    case completed
     case failed
   }
   
@@ -75,7 +75,7 @@ extension LQDownloadManager: URLSessionDownloadDelegate, URLSessionDataDelegate 
     }
     
     OperationQueue.main.addOperation {
-      downloadModel.completeBlock(.complete)
+      downloadModel.completeBlock(.completed)
     }
   }
   
@@ -141,7 +141,7 @@ extension LQDownloadManager {
     ) {
     
     if isComplete(urlString) {
-      completeBlock(.complete)
+      completeBlock(.completed)
       debugPrint("(￣.￣)该资源已下载完成")
       return
     }
@@ -161,7 +161,7 @@ extension LQDownloadManager {
     let downloadTask = session.downloadTask(with: url)
     let downloadModel = LQDownloadModel(url: urlString, downloadTask: downloadTask, progressBlock: progress, completeBlock: completeBlock, fileExpectedSize: nil)
     
-    downloadModel.completeBlock(.start)
+    downloadModel.completeBlock(.started)
     onGoingDownloads[urlString] = downloadModel
     downloadTask.resume()
   }
@@ -285,11 +285,11 @@ extension LQDownloadManager {
     switch task.state {
     case .running:
       task.suspend()
-      onGoingDownloads[urlString]?.completeBlock(.suspend)
+      onGoingDownloads[urlString]?.completeBlock(.suspended)
     case .canceling,
          .suspended:
       task.resume()
-      onGoingDownloads[urlString]?.completeBlock(.start)
+      onGoingDownloads[urlString]?.completeBlock(.started)
     case .completed:
       break
     }

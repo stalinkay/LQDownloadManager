@@ -81,13 +81,13 @@ extension ViewController {
       self.progressView.progress = Float(progress)
     }) { status in
       switch status {
-      case .start:
+      case .started:
         print("开始下载")
         self.downloadButton.setTitle("暂停下载", for: .normal)
-      case .suspend:
+      case .suspended:
         print("下载暂停")
         self.downloadButton.setTitle("开始下载", for: .normal)
-      case .complete:
+      case .completed:
         print("下载完成")
         self.downloadButton.setTitle("下载完成", for: .normal)
       case .failed:

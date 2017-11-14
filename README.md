@@ -34,13 +34,13 @@ LQDownloadManager.shared.download("#download file url string#", progress: {
     status in
  
       switch status {
-      case .start:
+      case .started:
       
         // ...
-      case .suspend:
+      case .suspended:
       
        // ...
-      case .complete:
+      case .completed:
       
        // ...
       case .failed:
